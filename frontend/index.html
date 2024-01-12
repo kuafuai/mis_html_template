@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>第一个页面</title>
+    <meta content="第一个页面" name="description">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/vue.min.js"></script>
+
+
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/http.js"></script>
+    <script src="js/request.js"></script>
+
+
+</head>
+<body>
+<div id="app">
+    <div>
+  <el-row :gutter="20">
+    <el-col :span="24" :xs="24">
+      <el-form :model="iUOKcuqueryParams" ref="iUOKcuqueryRef" :inline="true" label-width="68px">
+        <el-form-item label="字典名称" prop="dictName">
+          <el-input v-model="iUOKcuqueryParams.dictName" ></el-input>
+        </el-form-item>
+        <el-form-item label="字典类型" prop="dictType">
+          <el-input v-model="iUOKcuqueryParams.dictType" ></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="iUOKcuqueryParams.status" clearable>
+            <el-option v-for="item in iUOKcustatusDataList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="Search" type="primary"  @click="iUOKcuhandleQuery">搜索</el-button>
+          <el-button icon="Refresh" @click="iUOKcuresetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+
+    
+    <el-row :gutter="10" class="mb8">
+        
+        <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="iUOKcuhandleAdd"
+            >新增</el-button>
+        </el-col>
+        
+        
+        <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="iUOKcumultiple"
+              @click="iUOKcuhandleDelete"
+            >删除</el-button>
+          </el-col>
+        
+    </el-row>
+    
+
+    <el-table border :data="iUOKcuTableDataList"  @selection-change="iUOKcuhandleSelectionChange" >
+    
+        <el-table-column type="selection" width="55" align="center" fixed ></el-table-column>
+    
+        <el-table-column label="ID" align="center" prop="dictId" >
+        
+        </el-table-column>
+    
+        <el-table-column label="字典名称" align="center" prop="dictName" >
+        
+        </el-table-column>
+    
+        <el-table-column label="字典类型" align="center" prop="dictType" >
+        
+            <template slot-scope="scope">
+                <el-link
+href="http://www.baidu.com"
+target="_blank"
+>
+{{ scope.row.dictType }}
+</el-link>
+
+            </template>
+        
+        </el-table-column>
+    
+        <el-table-column label="状态" align="center" prop="status" >
+        
+            <template slot-scope="scope">
+                <el-switch
+v-model="scope.row.status"
+active-value="0" inactive-value="1"
+@change="i09rFHonChange(scope.row)"
+
+>
+</el-switch>
+
+            </template>
+        
+        </el-table-column>
+    
+    
+    <el-table-column
+            label="操作"
+            align="center"
+            width="160"
+            class-name="small-padding fixed-width"
+    >
+        <template slot-scope="scope">
+            
+            <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="iUOKcuhandleUpdate(scope.row)"
+              >修改</el-button>
+              
+              
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="iUOKcuhandleDelete(scope.row)"
+              >删除</el-button>
+              
+        </template>
+    </el-table-column>
+    
+    </el-table>
+
+    
+    <el-pagination
+            :current-page="iUOKcuqueryParams.pageNum"
+            :page-size="iUOKcuqueryParams.pageSize"
+            :page-sizes="[10,20,50]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="iUOKcutotal"
+            @size-change="iUOKcuhandleSizeChange"
+            @current-change="iUOKcuhandleCurrentPageChange" style="margin-top: 20px">
+    </el-pagination>
+    
+
+    </el-col>
+  </el-row>
+
+  
+   <el-dialog :title="iUOKcutitle" :visible.sync="iUOKcuopen">
+       <el-form ref="iUOKcuformRef" :model="iUOKcuform"  label-width="80px">
+           
+            <el-form-item label="字典名称" prop="dictName">
+              
+                <el-input v-model="iUOKcuform.dictName" ></el-input>
+              
+            </el-form-item>
+           
+            <el-form-item label="字典类型" prop="dictType">
+              
+                <el-input v-model="iUOKcuform.dictType" ></el-input>
+              
+            </el-form-item>
+           
+            <el-form-item label="状态" prop="status">
+              
+                <el-select v-model="iUOKcuform.status">
+                   <el-option v-for="item in iUOKcustatusDataList" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+              
+            </el-form-item>
+           
+       </el-form>
+       <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="iUOKcusubmitForm">确 定</el-button>
+        <el-button @click="iUOKcucancel">取 消</el-button>
+      </div>
+   </el-dialog>
+  
+
+</div>
+
+</div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                iUOKcustatusDataList: [] ,
+iUOKcuform: {
+  dictId: null,
+  dictName: null,
+  dictType: null,
+  status: null
+} ,
+iUOKcuqueryParams: {
+  pageNum: 1,
+  pageSize: 10,
+  dictId: null,
+  dictName: null,
+  dictType: null,
+  status: null
+} ,
+iUOKcuTableDataList: [] ,
+iUOKcutotal: 0 ,
+iUOKcuids: [] ,
+iUOKcumultiple: true ,
+iUOKcutitle: '' ,
+iUOKcuopen: false ,
+
+
+            }
+        },
+        computed: {
+
+        },
+        methods: {
+            i09rFHonChange(row){
+    data = {}
+    data.dictId = row.dictId;
+    data.status = row.status;
+
+    
+
+    i09rFHchange_Request(data).then(resp=>{
+        this.$message({message:'操作成功',type: 'success'});
+    }).catch(() => {})
+
+
+},
+
+iUOKcustatusGetList(){
+    iUOKcustatusGetListRequest().then(resp=>{
+        this.iUOKcustatusDataList =
+                    resp.data.map(p=>({label: p.dictLabel, value: p.dictValue }));
+    }).catch(() => {})
+},
+
+iUOKcugetList(){
+    iUOKculistRequest(this.iUOKcuqueryParams).then(resp=>{
+        this.iUOKcuTableDataList = resp.rows;
+        
+        this.iUOKcutotal=resp.total
+        
+    });
+},
+
+iUOKcuresetQuery(){
+    this.$refs.iUOKcuqueryRef.resetFields();
+    this.iUOKcuhandleQuery();
+},
+
+iUOKcuhandleQuery(){
+    this.iUOKcuqueryParams.pageNum = 1;
+    this.iUOKcugetList();
+},
+
+iUOKcureset(){
+    this.iUOKcuform={
+    dictId: undefined,
+    dictName: undefined,
+    dictType: undefined,
+    status: undefined,
+    }
+    if (this.$refs['iUOKcuformRef']) {
+        this.$refs.iUOKcuformRef.resetFields();
+    }
+},
+
+
+iUOKcuhandleAdd(){
+    this.iUOKcureset();
+    this.iUOKcutitle="添加";
+    this.iUOKcuopen=true;
+},
+
+
+
+iUOKcuhandleUpdate(row){
+    this.iUOKcureset();
+    this.iUOKcuform={
+    dictId: row.dictId,
+    dictName: row.dictName,
+    dictType: row.dictType,
+    status: row.status,
+    }
+    this.iUOKcutitle="修改";
+    this.iUOKcuopen=true;
+},
+
+
+
+iUOKcuhandleDelete(row){
+    const ids = row.dictId || this.iUOKcuids
+    this.$confirm('是否确认删除数据',"系统提示",{
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: "warning",}).then(function(){
+        return iUOKcudelRequest(ids)
+      }).then(()=>{
+        this.iUOKcugetList();
+        this.$message({message:'删除成功',type: 'success'});
+      }).catch(() => {});;
+},
+
+
+
+iUOKcucancel() {
+  this.iUOKcuopen = false;
+  this.iUOKcureset();
+},
+
+iUOKcusubmitForm(){
+    if(this.iUOKcuform.dictId != undefined){
+        iUOKcueditRequest(this.iUOKcuform).then(resp=>{
+            this.$message({message:'修改成功',type: 'success'});
+            this.iUOKcuopen = false;
+            this.iUOKcugetList();
+        })
+    }else{
+        iUOKcuaddRequest(this.iUOKcuform).then(resp=>{
+            this.$message({message:'新增成功',type: 'success'});
+            this.iUOKcuopen = false;
+            this.iUOKcugetList();
+        })
+    }
+},
+
+
+
+
+
+
+iUOKcuhandleSelectionChange(selection){
+    this.iUOKcuids = selection.map(item => item.dictId);
+    
+        this.iUOKcumultiple = !selection.length;
+    
+},
+
+
+
+iUOKcuhandleSizeChange(size) {
+    this.iUOKcuqueryParams.pageSize = size;
+    this.iUOKcugetList();
+},
+iUOKcuhandleCurrentPageChange(newPage) {
+    this.iUOKcuqueryParams.pageNum = newPage;
+
+    this.iUOKcugetList();
+},
+
+
+        },
+        mounted() {
+
+        },
+        created() {
+            
+this.iUOKcustatusGetList();
+this.iUOKcugetList();
+
+
+        }
+    });
+
+
+</script>
+
+</html>
