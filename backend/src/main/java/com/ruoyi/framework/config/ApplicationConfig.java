@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import java.util.TimeZone;
 
@@ -35,5 +37,13 @@ public class ApplicationConfig {
             flyway.repair();
             flyway.migrate();
         };
+    }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        //此处可添加别的规则,目前只设置 允许双 //
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        return firewall;
     }
 }
