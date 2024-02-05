@@ -16,6 +16,16 @@
     <script src="js/http.js"></script>
     <script src="js/request.js"></script>
 
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?794f0729a2f7f4f0d063ecdd13276ac2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+
 
 </head>
 <body>
@@ -188,6 +198,17 @@ active-value="0" inactive-value="1"
 
 </div>
 
+  <div class="powerd" style="width: 100%;text-align: center;">
+    Powered By <span @click="codeflying" style="color: rgb(114, 0, 235);cursor:pointer">码上飞 -CodeFlying</span>
+  </div>
+  <div class="img" style="
+    position: fixed;
+    top: 35%;
+    left: 35%;
+    font-size: 55px;
+    transform: skew(0,30deg);">
+    <span style="color: rgba(177, 177, 177, 0.2);">CodeFlying@KuaFu AI</span>
+  </div>
 </div>
 </body>
 <script>
@@ -358,7 +379,9 @@ iUOKcuhandleCurrentPageChange(newPage) {
 
     this.iUOKcugetList();
 },
-
+        codeflying(){
+              window.open("https://codeflying.kuafuai.net/#/index")
+            },
 
         },
         mounted() {
